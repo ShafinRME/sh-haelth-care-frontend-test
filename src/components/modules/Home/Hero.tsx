@@ -77,7 +77,7 @@ export function Hero({
       />
       {/* Content Container */}
       <div className="w-full px-4 py-8 md:px-8 lg:px-16 relative">
-        <div className="mx-auto max-w-[1200px]">
+        <div className="mx-auto max-w-300">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
             {/* Left Column - Hero Content */}
             <div className="flex flex-col justify-center space-y-6">

@@ -1,9 +1,19 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { Menu } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const PublicNavbar = () => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null; // ⛔ prevents mismatch
   const navItems = [
     { href: "#", label: "Consultation" },
     { href: "#", label: "Health Plans" },
