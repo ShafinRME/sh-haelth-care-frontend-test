@@ -7,7 +7,8 @@ import AISearchDialog from "./AISSearchDialog";
 import MobileMenu from "./MobileMenu";
 import NavbarAuthButtons from "./NavbarAuthButtons";
 
-import logoImg from "../../assets/images/logo1.png";
+import logoImg from "../../assets/images/logo.png";
+import { Logo } from "../ui/Logo";
 
 const PublicNavbar = async () => {
   const navItems = [
@@ -27,16 +28,7 @@ const PublicNavbar = async () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur dark:bg-background/95">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/" className="flex items-center space-x-2">
-          <Image
-            src={logoImg}
-            alt="Logo"
-            width={120} // Adjust based on your logo size
-            height={40}  // Adjust based on your logo size
-            priority
-            className="h-auto w-auto"
-          />
-        </Link>
+        <Logo />
 
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
           {navItems.map((link) => (

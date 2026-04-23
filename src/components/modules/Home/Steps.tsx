@@ -1,61 +1,202 @@
 import { Search, ClipboardList, CalendarCheck, ShieldCheck, FileText, Video, CreditCard, HeartPulse } from 'lucide-react';
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 const steps = [
-  { icon: Search, title: 'Search Doctor', description: 'Find your doctor easily with a minimum of effort.' },
-  { icon: ClipboardList, title: 'Check Doctor Profile', description: 'Get to know your doctor better.' },
-  { icon: CalendarCheck, title: 'Schedule Appointment', description: 'Choose the time and date that suits you.' },
-  { icon: ShieldCheck, title: 'Get Your Solution', description: 'Our doctors are here to help you.' },
-  { icon: FileText, title: 'Electronic prescription', description: 'Get your prescription instantly.' },
-  { icon: Video, title: 'Instant video consultation', description: 'Consult with your doctor from anywhere.' },
-  { icon: CreditCard, title: 'Easy payment options', description: 'Pay with ease using various methods.' },
-  { icon: HeartPulse, title: 'Health recovery', description: 'Start your journey to better health.' },
+  { 
+    icon: Search, 
+    title: 'Search Doctor', 
+    description: 'Find your doctor easily with a minimum of effort.',
+    color: 'blue'
+  },
+  { 
+    icon: ClipboardList, 
+    title: 'Check Doctor Profile', 
+    description: 'Get to know your doctor better.',
+    color: 'pink'
+  },
+  { 
+    icon: CalendarCheck, 
+    title: 'Schedule Appointment', 
+    description: 'Choose the time and date that suits you.',
+    color: 'green'
+  },
+  { 
+    icon: ShieldCheck, 
+    title: 'Get Your Solution', 
+    description: 'Our doctors are here to help you.',
+    color: 'yellow'
+  },
+  { 
+    icon: FileText, 
+    title: 'Electronic prescription', 
+    description: 'Get your prescription instantly.',
+    color: 'purple'
+  },
+  { 
+    icon: Video, 
+    title: 'Instant video consultation', 
+    description: 'Consult with your doctor from anywhere.',
+    color: 'indigo'
+  },
+  { 
+    icon: CreditCard, 
+    title: 'Easy payment options', 
+    description: 'Pay with ease using various methods.',
+    color: 'orange'
+  },
+  { 
+    icon: HeartPulse, 
+    title: 'Health recovery', 
+    description: 'Start your journey to better health.',
+    color: 'red'
+  },
 ];
 
-const StepCard = ({ icon: Icon, title, description, index }: { icon: React.ElementType, title: string, description: string, index: number }) => {
-  const bgColors = [
-    'bg-blue-50', 'bg-pink-50', 'bg-green-50', 'bg-yellow-50',
-    'bg-pink-50', 'bg-blue-50', 'bg-yellow-50', 'bg-green-50'
-  ];
-  const textColors = [
-    'text-blue-500', 'text-pink-500', 'text-green-500', 'text-yellow-500',
-    'text-pink-500', 'text-blue-500', 'text-yellow-500', 'text-green-500'
-  ];
+const colorVariants = {
+  blue: {
+    bg: 'bg-blue-50',
+    iconBg: 'bg-blue-500',
+    iconHover: 'group-hover:bg-blue-600',
+    cardHover: 'hover:border-blue-200',
+  },
+  pink: {
+    bg: 'bg-pink-50',
+    iconBg: 'bg-pink-500',
+    iconHover: 'group-hover:bg-pink-600',
+    cardHover: 'hover:border-pink-200',
+  },
+  green: {
+    bg: 'bg-green-50',
+    iconBg: 'bg-green-500',
+    iconHover: 'group-hover:bg-green-600',
+    cardHover: 'hover:border-green-200',
+  },
+  yellow: {
+    bg: 'bg-amber-50',
+    iconBg: 'bg-amber-500',
+    iconHover: 'group-hover:bg-amber-600',
+    cardHover: 'hover:border-amber-200',
+  },
+  purple: {
+    bg: 'bg-purple-50',
+    iconBg: 'bg-purple-500',
+    iconHover: 'group-hover:bg-purple-600',
+    cardHover: 'hover:border-purple-200',
+  },
+  indigo: {
+    bg: 'bg-indigo-50',
+    iconBg: 'bg-indigo-500',
+    iconHover: 'group-hover:bg-indigo-600',
+    cardHover: 'hover:border-indigo-200',
+  },
+  orange: {
+    bg: 'bg-orange-50',
+    iconBg: 'bg-orange-500',
+    iconHover: 'group-hover:bg-orange-600',
+    cardHover: 'hover:border-orange-200',
+  },
+  red: {
+    bg: 'bg-red-50',
+    iconBg: 'bg-red-500',
+    iconHover: 'group-hover:bg-red-600',
+    cardHover: 'hover:border-red-200',
+  },
+};
 
+const StepCard = ({ 
+  icon: Icon, 
+  title, 
+  description, 
+  index,
+  color 
+}: { 
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  index: number;
+  color: keyof typeof colorVariants;
+}) => {
+  const variant = colorVariants[color];
+  
   return (
-    <Card className={`${bgColors[index % 8]}`}>
-      <CardContent className="p-4">
-        <div className="flex items-center space-x-4">
-          <div className={`p-3 rounded-full ${textColors[index % 8]} bg-white shadow-sm`}>
-            <Icon size={24} />
+    <Card 
+      className={cn(
+        'group relative overflow-hidden border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-1',
+        variant.bg,
+        variant.cardHover
+      )}
+    >
+      <CardContent className="p-6">
+        {/* Step Number */}
+        <div className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 backdrop-blur-sm">
+          <span className="text-sm font-bold text-gray-600">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+        </div>
+
+        <div className="flex flex-col space-y-4">
+          {/* Icon */}
+          <div
+            className={cn(
+              'inline-flex h-14 w-14 items-center justify-center rounded-xl shadow-lg transition-all duration-300',
+              variant.iconBg,
+              variant.iconHover,
+              'group-hover:scale-110 group-hover:shadow-2xl'
+            )}
+          >
+            <Icon size={28} className="text-white" />
           </div>
-          <div>
-            <h3 className="font-bold text-foreground">{title}</h3>
-            <p className="text-muted-foreground text-sm">{description}</p>
+
+          {/* Content */}
+          <div className="space-y-2">
+            <h3 className="text-lg font-bold text-foreground transition-colors group-hover:text-gray-900">
+              {title}
+            </h3>
+            <p className="text-sm leading-relaxed text-muted-foreground transition-colors group-hover:text-gray-700">
+              {description}
+            </p>
           </div>
         </div>
+
+        {/* Decorative gradient */}
+        <div className="absolute -bottom-16 -right-16 h-32 w-32 rounded-full bg-white/20 transition-transform duration-500 group-hover:scale-150" />
       </CardContent>
     </Card>
   );
 };
 
-
 const Steps = () => {
   return (
-    <section className="py-24">
+    <section className="bg-gradient-to-b from-white to-gray-50/50 py-20 md:py-24 lg:py-28">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto">
-          <h2 className="text-3xl font-bold text-foreground">Easy Steps to Get Your Solution</h2>
-          <p className="text-muted-foreground mt-4">
+        {/* Header */}
+        <div className="mx-auto mb-16 max-w-3xl text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 ring-1 ring-blue-100">
+            <HeartPulse className="h-4 w-4" />
+            How It Works
+          </div>
+          <h2 className="mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-3xl font-bold text-transparent lg:text-4xl">
+            Easy Steps to Get Your Solution
+          </h2>
+          <p className="text-base text-muted-foreground lg:text-lg">
             We provide advanced technologies and high-quality surgery facilities right here.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+        {/* Steps Grid */}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, index) => (
             <StepCard key={index} {...step} index={index} />
           ))}
+        </div>
+
+        {/* Bottom CTA */}
+        <div className="mt-12 text-center">
+          <p className="text-sm font-medium text-muted-foreground">
+            Join thousands of satisfied patients who found their perfect healthcare solution
+          </p>
         </div>
       </div>
     </section>
