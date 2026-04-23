@@ -183,7 +183,7 @@ export default function Specialities() {
     const fetchSpecialties = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BASE_API_URL}/specialties?limit=8`
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/specialties?limit=10`
         );
         if (!res.ok) throw new Error("Failed to fetch specialties");
         const json = await res.json();

@@ -153,7 +153,7 @@ export default function PublicFooter() {
             </h3>
           </div>
           <Link
-            href="/doctors"
+            href="/consultation"
             style={{
               display: "inline-flex", alignItems: "center", gap: 6,
               fontSize: 13, fontWeight: 600,

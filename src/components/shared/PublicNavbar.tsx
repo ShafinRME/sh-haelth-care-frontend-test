@@ -2,12 +2,9 @@ import { getDefaultDashboardRoute } from "@/lib/auth-utils";
 import { getUserInfo } from "@/services/auth/getUserInfo";
 import { getCookie } from "@/services/auth/tokenHandlers";
 import Link from "next/link";
-import Image from "next/image"; // Add this import
 import AISearchDialog from "./AISSearchDialog";
 import MobileMenu from "./MobileMenu";
 import NavbarAuthButtons from "./NavbarAuthButtons";
-
-import logoImg from "../../assets/images/logo.png";
 import { Logo } from "../ui/Logo";
 
 const PublicNavbar = async () => {

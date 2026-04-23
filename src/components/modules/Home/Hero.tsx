@@ -1,203 +1,195 @@
-import { Search, Calendar, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { HeroProps } from "@/types/heroProps";
-import { LargeSparkleIcon, SparkleIcon } from "@/assets/icons/SparkleIcon";
+"use client";
+import { Calendar, Search, Star } from "lucide-react";
 
-export function Hero({
-  badge = {
-    text: "AI-Powered Healthcare",
-  },
-  heading = {
-    line1: "Find Your Perfect",
-    line2: "Doctor with AI",
-  },
-  description = [
-    "Our advanced AI technology analyzes your symptoms, medical",
-    "history, and preferences to match you with the best-fit doctors",
-    "in seconds.",
-  ],
-  buttons = {
-    primary: {
-      text: "Find Your Doctor",
-    },
-    secondary: {
-      text: "Book Appointment",
-    },
-  },
-  stats = [
-    { value: "50K+", label: "Patients Served" },
-    { value: "1000+", label: "Expert Doctors" },
-    {
-      value: "4.9",
-      label: "Patient Rating",
-      icon: <Star className="size-6 fill-yellow-400 stroke-yellow-400" />,
-    },
-  ],
-  formCard = {
-    title: "AI Doctor Finder",
-    symptomLabel: "What are your symptoms?",
-    symptomPlaceholder: "e.g., headache, fever, cough",
-    specialtyLabel: "Preferred specialty",
-    specialtyOptions: [
-      "General Physician",
-      "Cardiologist",
-      "Dermatologist",
-      "Pediatrician",
-      "Orthopedic",
-    ],
-    defaultSpecialty: "General Physician",
-    submitText: "Get AI Recommendations",
-    footerText:
-      "✨ Powered by advanced AI algorithms for accurate doctor matching",
-  },
-}: HeroProps) {
+export function Hero() {
   return (
-    <div className="relative w-full overflow-hidden">
-      {/* Enhanced Gradient Background with Animation */}
-      <div
-        className="absolute inset-0 z-0 opacity-95"
-        style={{
-          background:
-            "radial-gradient(130% 130% at 50% 100%, #ffffff 25%, #3b82f6 95%)",
-        }}
-      />
-      
-      {/* Decorative Elements */}
-      <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-blue-400/10 blur-3xl" />
-      <div className="absolute left-0 bottom-0 h-80 w-80 rounded-full bg-indigo-400/10 blur-3xl" />
+    <div className="relative w-full overflow-hidden min-h-[88vh] flex items-center">
+      {/* Subtle decorative blobs */}
+      <div className="absolute top-0 right-0 w-[360px] h-[360px] rounded-full bg-blue-500/5 -translate-y-1/3 translate-x-1/3 pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[220px] h-[220px] rounded-full bg-indigo-500/5 translate-y-1/3 -translate-x-1/3 pointer-events-none" />
 
-      {/* Content Container */}
-      <div className="relative w-full px-4 py-12 md:px-8 md:py-16 lg:px-16 lg:py-20">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
-            {/* Left Column - Hero Content */}
-            <div className="flex flex-col justify-center space-y-8">
-              {/* Enhanced Badge */}
-              <div className="inline-flex items-center gap-3 self-start rounded-full bg-white px-5 py-2.5 shadow-lg shadow-blue-500/10 ring-1 ring-blue-100 transition-all hover:shadow-xl hover:shadow-blue-500/20">
-                <SparkleIcon />
-                <span className="text-sm font-semibold text-blue-700">
-                  {badge.text}
-                </span>
-              </div>
+      <div className="relative w-full max-w-[1100px] mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-              {/* Heading with Gradient */}
-              <div className="space-y-2">
-                <h1 className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-5xl font-bold leading-tight text-transparent lg:text-6xl">
-                  {heading.line1}
-                </h1>
-                <h1 className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-5xl font-bold leading-tight text-transparent lg:text-6xl">
-                  {heading.line2}
-                </h1>
-              </div>
+        {/* ── Left column ── */}
+        <div className="flex flex-col">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full border text-xs font-medium text-muted-foreground bg-muted mb-6">
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
+            AI-powered doctor matching
+          </div>
 
-              {/* Description */}
-              <div className="space-y-1 text-lg leading-relaxed text-gray-600">
-                {description.map((line, index) => (
-                  <p key={index}>{line}</p>
-                ))}
-              </div>
+          {/* Heading */}
+          <h1 className="text-[clamp(32px,3.5vw,48px)] font-bold leading-[1.15] text-foreground mb-4">
+            Your health,<br />matched by<br />
+            <span className="text-blue-600">intelligent AI</span>
+          </h1>
 
-              {/* Enhanced Buttons */}
-              <div className="flex flex-col gap-4 sm:flex-row">
-                {buttons.primary && (
-                  <Button
-                    onClick={buttons.primary.onClick}
-                    size="lg"
-                    className="group h-auto gap-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-4 text-base font-semibold shadow-lg shadow-blue-500/30 transition-all hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105"
-                  >
-                    <Search className="size-5 transition-transform group-hover:scale-110" />
-                    {buttons.primary.text}
-                  </Button>
-                )}
-                {buttons.secondary && (
-                  <Button
-                    onClick={buttons.secondary.onClick}
-                    variant="outline"
-                    size="lg"
-                    className="h-auto gap-3 rounded-xl border-2 border-blue-600 bg-white px-8 py-4 text-base font-semibold text-blue-600 transition-all hover:bg-blue-50 hover:scale-105"
-                  >
-                    <Calendar className="size-5" />
-                    {buttons.secondary.text}
-                  </Button>
-                )}
-              </div>
+          <p className="text-[15px] text-muted-foreground leading-relaxed max-w-[440px] mb-8">
+            Describe your symptoms once — our AI analyzes your medical profile
+            and instantly surfaces the right specialist for you. No guesswork,
+            no wasted appointments.
+          </p>
 
-              {/* Enhanced Stats */}
-              <div className="grid grid-cols-3 gap-6 pt-6">
-                {stats.map((stat, index) => (
-                  <div
-                    key={index}
-                    className="group cursor-default space-y-2 transition-transform hover:scale-105"
-                  >
-                    <div className="flex items-center gap-2">
-                      <p className="text-3xl font-bold text-gray-900 lg:text-4xl">
-                        {stat.value}
-                      </p>
-                      {stat.icon && (
-                        <span className="transition-transform group-hover:scale-110">
-                          {stat.icon}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm font-medium text-gray-600">
-                      {stat.label}
-                    </p>
+          {/* CTAs */}
+          <div className="flex flex-wrap gap-3 mb-10">
+            <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors">
+              <Calendar size={15} /> Book appointment
+            </button>
+            <button className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg border text-sm font-medium hover:bg-muted transition-colors">
+              <Search size={15} /> Browse doctors
+            </button>
+          </div>
+
+          {/* Stats */}
+          <div className="flex items-center gap-8">
+            {[
+              { val: "50K+", lbl: "Patients served" },
+              { val: "1,000+", lbl: "Expert doctors" },
+              { val: "4.9", lbl: "Patient rating", star: true },
+            ].map((s, i) => (
+              <div key={i} className="flex items-start gap-8">
+                {i > 0 && <div className="w-px h-8 bg-border self-center" />}
+                <div>
+                  <div className="flex items-center gap-1 text-[22px] font-bold text-foreground leading-none">
+                    {s.val}
+                    {s.star && (
+                      <Star size={14} className="fill-yellow-400 stroke-yellow-400" />
+                    )}
                   </div>
-                ))}
+                  <div className="text-xs text-muted-foreground mt-1">{s.lbl}</div>
+                </div>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Right column — AI card ── */}
+        <div className="rounded-xl border bg-card p-7 relative">
+          {/* AI engine banner */}
+          <div className="flex items-start gap-3 p-3.5 rounded-lg bg-muted border mb-5">
+            <div className="w-9 h-9 rounded-md bg-blue-50 dark:bg-blue-950 flex items-center justify-center flex-shrink-0">
+              <svg
+                className="w-[18px] h-[18px] text-blue-500"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 2a7 7 0 0 1 7 7c0 3-1.5 5.5-4 6.8V18H9v-2.2C6.5 14.5 5 12 5 9a7 7 0 0 1 7-7z" />
+                <line x1="9" y1="21" x2="15" y2="21" />
+                <line x1="9" y1="18" x2="15" y2="18" />
+              </svg>
             </div>
-
-            {/* Right Column - Enhanced Form Card */}
-            <div className="flex items-center justify-center lg:justify-end">
-              <div className="group w-full max-w-xl rounded-3xl bg-white p-8 shadow-2xl shadow-blue-900/10 ring-1 ring-gray-100 transition-all hover:shadow-3xl hover:shadow-blue-900/15 lg:p-10">
-                {/* Card Header */}
-                <div className="mb-8 flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    {formCard.title}
-                  </h2>
-                  <div className="transition-transform group-hover:scale-110">
-                    <LargeSparkleIcon />
-                  </div>
-                </div>
-
-                {/* Form */}
-                <form className="space-y-6">
-                  {/* Symptoms Input */}
-                  <div className="space-y-3">
-                    <Label
-                      htmlFor="symptoms"
-                      className="text-sm font-semibold text-gray-700"
-                    >
-                      {formCard.symptomLabel}
-                    </Label>
-                    <Input
-                      id="symptoms"
-                      name="symptoms"
-                      placeholder={formCard.symptomPlaceholder}
-                      className="h-14 rounded-xl border-2 border-gray-200 bg-gray-50/50 px-4 text-base transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <Button
-                    type="submit"
-                    className="h-14 w-full rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-base font-semibold shadow-lg shadow-blue-500/30 transition-all hover:shadow-xl hover:shadow-blue-500/40 hover:scale-[1.02]"
-                  >
-                    {formCard.submitText}
-                  </Button>
-                </form>
-
-                {/* Enhanced Footer */}
-                <div className="mt-8 rounded-xl border border-blue-100 bg-blue-50/50 px-4 py-3">
-                  <p className="text-center text-sm font-medium leading-relaxed text-blue-700">
-                    {formCard.footerText}
-                  </p>
-                </div>
+            <div>
+              <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-wider mb-0.5">
+                AI recommendation engine
+              </p>
+              <p className="text-[13px] text-muted-foreground leading-snug">
+                Analyzing symptoms · matching specialists · checking availability
+              </p>
+              <div className="flex gap-1 mt-1.5">
+                {[0, 200, 400].map((d) => (
+                  <span
+                    key={d}
+                    className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-bounce"
+                    style={{ animationDelay: `${d}ms` }}
+                  />
+                ))}
               </div>
             </div>
           </div>
+
+          {/* Inputs */}
+          <div className="space-y-3 mb-4">
+            <div>
+              <label className="text-xs text-muted-foreground mb-1.5 block">
+                Describe your symptoms
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. chest tightness, shortness of breath…"
+                className="w-full px-3.5 py-2.5 text-sm border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-muted-foreground mb-1.5 block">
+                Preferred specialty (optional)
+              </label>
+              <select className="w-full px-3.5 py-2.5 text-sm border rounded-lg bg-background focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors">
+                <option>Let AI decide</option>
+                <option>Cardiologist</option>
+                <option>Neurologist</option>
+                <option>Dermatologist</option>
+                <option>Pediatrician</option>
+                <option>General Physician</option>
+              </select>
+            </div>
+          </div>
+
+          {/* AI top matches */}
+          <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+            AI top matches
+          </p>
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            {[
+              {
+                initials: "DR",
+                name: "Dr. Rahman",
+                spec: "Cardiologist",
+                score: "98%",
+                bg: "bg-blue-50 dark:bg-blue-950",
+                color: "text-blue-700 dark:text-blue-300",
+              },
+              {
+                initials: "SA",
+                name: "Dr. Sara A.",
+                spec: "Internist",
+                score: "91%",
+                bg: "bg-green-50 dark:bg-green-950",
+                color: "text-green-700 dark:text-green-300",
+              },
+              {
+                initials: "MK",
+                name: "Dr. M. Khan",
+                spec: "Gen. Physician",
+                score: "87%",
+                bg: "bg-purple-50 dark:bg-purple-950",
+                color: "text-purple-700 dark:text-purple-300",
+              },
+            ].map((d) => (
+              <div
+                key={d.initials}
+                className="border rounded-lg p-2.5 bg-muted/40 flex flex-col gap-0.5 hover:border-blue-200 dark:hover:border-blue-800 transition-colors cursor-pointer"
+              >
+                <div
+                  className={`w-7 h-7 rounded-full ${d.bg} ${d.color} flex items-center justify-center text-[11px] font-semibold mb-1`}
+                >
+                  {d.initials}
+                </div>
+                <p className="text-xs font-medium text-foreground leading-tight">
+                  {d.name}
+                </p>
+                <p className="text-[11px] text-muted-foreground">{d.spec}</p>
+                <p className="text-[11px] font-semibold text-blue-600">
+                  {d.score} match
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Submit */}
+          <button className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors">
+            <Search size={14} />
+            Get AI recommendations
+          </button>
+
+          {/* Trust badges */}
+          <p className="text-center text-[11px] text-muted-foreground mt-3 flex items-center justify-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block flex-shrink-0" />
+            HIPAA compliant · end-to-end encrypted · ISO 27001
+          </p>
         </div>
       </div>
     </div>
