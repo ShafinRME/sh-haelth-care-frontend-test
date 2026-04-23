@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import { useEffect, useState } from "react";
 import { ArrowRight, Loader2, Stethoscope } from "lucide-react";
@@ -9,14 +10,14 @@ interface Specialty {
 }
 
 const CARD_ACCENTS = [
-  { tint: "rgba(99,102,241,0.07)",  ring: "rgba(99,102,241,0.3)",  dot: "#6366f1" },
-  { tint: "rgba(20,184,166,0.07)",  ring: "rgba(20,184,166,0.3)",  dot: "#14b8a6" },
-  { tint: "rgba(236,72,153,0.07)",  ring: "rgba(236,72,153,0.3)",  dot: "#ec4899" },
-  { tint: "rgba(245,158,11,0.07)",  ring: "rgba(245,158,11,0.3)",  dot: "#f59e0b" },
-  { tint: "rgba(34,197,94,0.07)",   ring: "rgba(34,197,94,0.3)",   dot: "#22c55e" },
-  { tint: "rgba(239,68,68,0.07)",   ring: "rgba(239,68,68,0.3)",   dot: "#ef4444" },
-  { tint: "rgba(168,85,247,0.07)",  ring: "rgba(168,85,247,0.3)",  dot: "#a855f7" },
-  { tint: "rgba(59,130,246,0.07)",  ring: "rgba(59,130,246,0.3)",  dot: "#3b82f6" },
+  { tint: "rgba(99,102,241,0.07)", ring: "rgba(99,102,241,0.3)", dot: "#6366f1" },
+  { tint: "rgba(20,184,166,0.07)", ring: "rgba(20,184,166,0.3)", dot: "#14b8a6" },
+  { tint: "rgba(236,72,153,0.07)", ring: "rgba(236,72,153,0.3)", dot: "#ec4899" },
+  { tint: "rgba(245,158,11,0.07)", ring: "rgba(245,158,11,0.3)", dot: "#f59e0b" },
+  { tint: "rgba(34,197,94,0.07)", ring: "rgba(34,197,94,0.3)", dot: "#22c55e" },
+  { tint: "rgba(239,68,68,0.07)", ring: "rgba(239,68,68,0.3)", dot: "#ef4444" },
+  { tint: "rgba(168,85,247,0.07)", ring: "rgba(168,85,247,0.3)", dot: "#a855f7" },
+  { tint: "rgba(59,130,246,0.07)", ring: "rgba(59,130,246,0.3)", dot: "#3b82f6" },
 ];
 
 const SpecialtyCard = ({ specialty, index }: { specialty: Specialty; index: number }) => {
@@ -182,7 +183,7 @@ export default function Specialities() {
     const fetchSpecialties = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URL}/specialties?limit=8`
+          `${process.env.NEXT_PUBLIC_BASE_API_URL}/specialties?limit=8`
         );
         if (!res.ok) throw new Error("Failed to fetch specialties");
         const json = await res.json();
