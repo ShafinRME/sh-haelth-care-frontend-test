@@ -90,7 +90,10 @@ function DoctorCard({ doctor }: { doctor: IDoctor }) {
 
       <CardFooter className="grid grid-cols-2 gap-3 p-6 pt-0">
         <Link href={`/consultation/doctor/${doctor.id}`}>
-          <Button variant="outline" className="w-full border transition-all hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950">
+          <Button
+            variant="outline"
+            className="w-full border transition-all hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950"
+          >
             View Profile
           </Button>
         </Link>
@@ -104,6 +107,7 @@ function DoctorCard({ doctor }: { doctor: IDoctor }) {
   );
 }
 
+// ── Skeleton ──────────────────────────────────────────────────────────────────
 function SkeletonCard() {
   return (
     <Card className="overflow-hidden animate-pulse">
@@ -125,41 +129,22 @@ function SkeletonCard() {
   );
 }
 
-// ── Main — client component so console.logs appear in BROWSER devtools ────────
+// ── Main ──────────────────────────────────────────────────────────────────────
 const TopRatedDoctors = () => {
   const [doctors, setDoctors] = useState<IDoctor[]>([]);
   const [loading, setLoading] = useState(true);
-  const [debugInfo, setDebugInfo] = useState<string>("");
 
   useEffect(() => {
     const fetchDoctors = async () => {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
-      const url = `${baseUrl}/doctors?limit=3&sortBy=averageRating&sortOrder=desc`;
-
-      // All these appear in browser Console tab (F12)
-      console.log("=== TopRatedDoctors Debug ===");
-      console.log("NEXT_PUBLIC_BASE_API_URL:", baseUrl);
-      console.log("Full URL being fetched:", url);
-
-      setDebugInfo(`Fetching: ${url}`);
-
       try {
+        const url = `${process.env.NEXT_PUBLIC_BASE_API_URL}/doctor?limit=3&sortBy=averageRating&sortOrder=desc`;
         const res = await fetch(url);
-
-        console.log("HTTP status:", res.status, res.statusText);
-
+        if (!res.ok) return;
         const json = await res.json();
-
-        console.log("Raw response JSON:", json);
-        console.log("json.data:", json?.data);
-        console.log("doctors count:", json?.data?.length ?? 0);
-
         const data: IDoctor[] = Array.isArray(json) ? json : (json?.data ?? []);
         setDoctors(data);
-        setDebugInfo(`✅ ${data.length} doctors fetched | Status ${res.status} | ${url}`);
       } catch (err) {
-        console.error("❌ Fetch failed:", err);
-        setDebugInfo(`❌ Error: ${String(err)} | URL: ${url}`);
+        console.error("TopRatedDoctors fetch error:", err);
       } finally {
         setLoading(false);
       }
@@ -188,13 +173,6 @@ const TopRatedDoctors = () => {
             provide you with world-class care.
           </p>
         </div>
-
-        {/* 🔍 Debug strip — visible on page. Remove after issue is fixed. */}
-        {debugInfo && (
-          <div className="mb-8 mx-auto max-w-3xl rounded-lg border border-yellow-300 bg-yellow-50 dark:bg-yellow-950/40 dark:border-yellow-700 px-4 py-3 text-xs font-mono text-yellow-900 dark:text-yellow-200 break-all">
-            🔍 {debugInfo}
-          </div>
-        )}
 
         {/* Grid */}
         {loading || doctors.length === 0 ? (
