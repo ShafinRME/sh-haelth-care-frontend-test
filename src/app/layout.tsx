@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "PH-Health-Care",
+  title: "Cure Wave - Your Health Companion",
   description: "A healthcare application built with Next.js",
 };
 
