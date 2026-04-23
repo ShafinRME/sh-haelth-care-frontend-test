@@ -1,12 +1,13 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { Logo } from "@/components/ui/Logo";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { getIconComponent } from "@/lib/icon-mapper";
 import { cn } from "@/lib/utils";
 import { NavSection } from "@/types/dashboard.interface";
 import { UserInfo } from "@/types/user.interface";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -26,9 +27,7 @@ const DashboardSidebarContent = ({
         <div className="hidden md:flex h-full w-64 flex-col border-r bg-card">
             {/* Logo/Brand */}
             <div className="flex h-16 items-center border-b px-6">
-                <Link href={dashboardHome} className="flex items-center space-x-2">
-                    <span className="text-xl font-bold text-primary">Cure Wave</span>
-                </Link>
+                <Logo href={dashboardHome} width={110} height={45} />
             </div>
 
             {/* Navigation */}

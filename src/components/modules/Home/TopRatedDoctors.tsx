@@ -1,177 +1,225 @@
-import { Star, Award, Clock } from 'lucide-react';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import Image from 'next/image';
-import cardioDoc from '../../../assets/images/doctor-cardiologist.jpg';
-import neurolDoc from '../../../assets/images/doctor-neurologist.jpg';
-import orthoDoc from '../../../assets/images/doctor-orthopedic.jpg';
+import { Star, Award, Clock, DollarSign, MapPin, ArrowRight } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { IDoctor } from "@/types/doctor.interface";
+import { getInitials } from "@/lib/formatters";
+import Link from "next/link";
 
-const doctors = [
-  {
-    name: 'Dr. Cameron Williamson',
-    specialty: 'Cardiologist',
-    rating: 4.9,
-    reviews: 23,
-    image: cardioDoc,
-    experience: '15+ years',
-    availability: 'Available Today',
-  },
-  {
-    name: 'Dr. Leslie Alexander',
-    specialty: 'Neurologist',
-    rating: 4.8,
-    reviews: 45,
-    image: neurolDoc,
-    experience: '12+ years',
-    availability: 'Available Today',
-  },
-  {
-    name: 'Dr. Robert Fox',
-    specialty: 'Orthopedic',
-    rating: 4.9,
-    reviews: 32,
-    image: orthoDoc,
-    experience: '18+ years',
-    availability: 'Available Tomorrow',
-  },
-];
+// ── Server-side fetch (no useEffect needed — this is a Server Component) ──────
+async function getTopRatedDoctors(): Promise<IDoctor[]> {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API_URL}/doctors?limit=3&sortBy=averageRating&sortOrder=desc`,
+      {
+        next: { revalidate: 300 }, // ISR: refresh every 5 minutes
+      }
+    );
+    if (!res.ok) return [];
+    const json = await res.json();
+    return json?.data ?? [];
+  } catch {
+    return [];
+  }
+}
 
-const DoctorCard = ({ doctor }: { doctor: typeof doctors[0] }) => {
+// ── Individual doctor card ─────────────────────────────────────────────────────
+function DoctorCard({ doctor }: { doctor: IDoctor }) {
+  const primarySpecialty = doctor.doctorSpecialties?.[0]?.specialities?.title;
+
   return (
-    <Card className="group relative overflow-hidden border-2 transition-all duration-300 hover:border-blue-200 hover:shadow-2xl hover:-translate-y-2">
-      {/* Verified Badge */}
-      <div className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full bg-green-500 px-3 py-1 text-xs font-semibold text-white shadow-lg">
+    <Card className="group relative overflow-hidden border transition-all duration-300 hover:border-blue-200 hover:shadow-xl hover:-translate-y-1.5">
+      {/* Verified badge */}
+      <div className="absolute right-4 top-4 z-10 flex items-center gap-1 rounded-full bg-green-500 px-2.5 py-1 text-[11px] font-semibold text-white shadow">
         <Award className="h-3 w-3" />
         Verified
       </div>
 
-      <CardHeader className="relative bg-gradient-to-br from-blue-50 via-blue-50/50 to-indigo-50/30 p-8">
-        {/* Background Decoration */}
-        <div className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <div className="absolute right-0 top-0 h-32 w-32 -translate-y-1/2 translate-x-1/2 rounded-full bg-blue-400/10 blur-2xl" />
-          <div className="absolute bottom-0 left-0 h-32 w-32 translate-y-1/2 -translate-x-1/2 rounded-full bg-indigo-400/10 blur-2xl" />
-        </div>
-
-        {/* Doctor Image */}
-        <div className="relative mx-auto">
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400 to-indigo-400 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-40" />
-          <Image
-            src={doctor.image}
-            alt={doctor.name}
-            width={120}
-            height={120}
-            className="relative rounded-full border-4 border-white shadow-xl transition-transform duration-300 group-hover:scale-105"
-          />
+      {/* Header — avatar */}
+      <CardHeader className="relative bg-gradient-to-br from-blue-50/80 to-indigo-50/40 dark:from-blue-950/30 dark:to-indigo-950/20 p-8 flex items-center justify-center">
+        <div className="relative">
+          {/* Glow on hover */}
+          <div className="absolute inset-0 rounded-full bg-blue-400/20 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
+          <Avatar className="h-28 w-28 border-4 border-white shadow-lg transition-transform duration-300 group-hover:scale-105">
+            <AvatarImage src={doctor.profilePhoto || ""} alt={doctor.name} />
+            <AvatarFallback className="text-2xl bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+              {getInitials(doctor.name)}
+            </AvatarFallback>
+          </Avatar>
         </div>
       </CardHeader>
 
+      {/* Content */}
       <CardContent className="space-y-4 p-6">
-        {/* Doctor Info */}
+        {/* Name & specialty */}
         <div className="text-center">
-          <h3 className="mb-1 text-xl font-bold text-foreground transition-colors group-hover:text-blue-600">
-            {doctor.name}
+          <h3 className="mb-1.5 text-lg font-bold text-foreground transition-colors group-hover:text-blue-600 line-clamp-1">
+            Dr. {doctor.name}
           </h3>
-          <p className="mb-3 inline-flex items-center gap-1 rounded-full bg-blue-50 px-3 py-1 text-sm font-semibold text-blue-700 ring-1 ring-blue-100">
-            {doctor.specialty}
+          <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
+            {doctor.designation}
           </p>
+          {primarySpecialty && (
+            <Badge className="bg-blue-50 text-blue-700 border-blue-100 hover:bg-blue-100 dark:bg-blue-950 dark:text-blue-300">
+              {primarySpecialty}
+            </Badge>
+          )}
         </div>
 
-        {/* Stats */}
-        <div className="space-y-3 border-y border-gray-100 py-4">
+        {/* Stats grid */}
+        <div className="border-y border-border py-4 space-y-2.5">
           {/* Rating */}
           <div className="flex items-center justify-center gap-2 text-sm">
             <div className="flex items-center gap-1">
-              <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-              <span className="font-bold text-foreground">{doctor.rating}</span>
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+              <span className="font-semibold text-foreground">
+                {doctor.averageRating?.toFixed(1) ?? "N/A"}
+              </span>
             </div>
-            <span className="text-muted-foreground">
-              ({doctor.reviews} reviews)
-            </span>
+
           </div>
 
           {/* Experience */}
           <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Award className="h-4 w-4" />
-            <span>{doctor.experience} experience</span>
+            <Clock className="h-3.5 w-3.5 shrink-0" />
+            <span>{doctor.experience} years experience</span>
           </div>
 
-          {/* Availability */}
+          {/* Fee */}
           <div className="flex items-center justify-center gap-2 text-sm">
-            <Clock className="h-4 w-4 text-green-500" />
-            <span className="font-semibold text-green-600">
-              {doctor.availability}
+            <DollarSign className="h-3.5 w-3.5 text-green-500 shrink-0" />
+            <span className="font-semibold text-foreground">
+              ${doctor.appointmentFee}
             </span>
+            <span className="text-muted-foreground text-xs">/ consultation</span>
           </div>
+
+          {/* Working place */}
+          {doctor.currentWorkingPlace && (
+            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
+              <MapPin className="h-3.5 w-3.5 shrink-0" />
+              <span className="line-clamp-1">{doctor.currentWorkingPlace}</span>
+            </div>
+          )}
         </div>
+
+        {/* Extra specialties */}
+        {doctor.doctorSpecialties && doctor.doctorSpecialties.length > 1 && (
+          <div className="flex flex-wrap justify-center gap-1">
+            {doctor.doctorSpecialties.slice(1, 3).map((s) => (
+              <Badge key={s.specialitiesId} variant="outline" className="text-xs">
+                {s.specialities?.title}
+              </Badge>
+            ))}
+            {doctor.doctorSpecialties.length > 3 && (
+              <Badge variant="outline" className="text-xs">
+                +{doctor.doctorSpecialties.length - 3} more
+              </Badge>
+            )}
+          </div>
+        )}
       </CardContent>
 
+      {/* Footer — functional buttons */}
       <CardFooter className="grid grid-cols-2 gap-3 p-6 pt-0">
-        <Button
-          variant="outline"
-          className="group/btn border-2 transition-all hover:border-blue-600 hover:bg-blue-50 hover:text-blue-600"
-        >
-          View Profile
-        </Button>
-        <Button className="group/btn bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg shadow-blue-500/30 transition-all hover:shadow-xl hover:shadow-blue-500/40">
-          Book Now
-        </Button>
+        {/* View Details → doctor detail page */}
+        <Link href={`/consultation/doctor/${doctor.id}`}>
+          <Button
+            variant="outline"
+            className="w-full border transition-all hover:border-blue-400 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-blue-950"
+          >
+            View Profile
+          </Button>
+        </Link>
+
+        {/* Book Now → consultation listing (user will pick slot there) */}
+        <Link href={`/consultation?highlight=${doctor.id}`}>
+          <Button className="w-full bg-blue-600 hover:bg-blue-700 transition-colors">
+            Book Now
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );
-};
+}
 
-const TopRatedDoctors = () => {
+// ── Skeleton for loading / empty states ───────────────────────────────────────
+function SkeletonCard() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/20 py-20 md:py-24 lg:py-28">
-      {/* Decorative Elements */}
-      <div className="absolute right-0 top-0 h-96 w-96 -translate-y-1/2 translate-x-1/2 rounded-full bg-blue-400/5 blur-3xl" />
-      <div className="absolute bottom-0 left-0 h-96 w-96 translate-y-1/2 -translate-x-1/2 rounded-full bg-indigo-400/5 blur-3xl" />
+    <Card className="overflow-hidden animate-pulse">
+      <CardHeader className="h-44 bg-muted" />
+      <CardContent className="p-6 space-y-3">
+        <div className="h-5 w-2/3 mx-auto rounded bg-muted" />
+        <div className="h-4 w-1/2 mx-auto rounded bg-muted" />
+        <div className="h-px w-full bg-muted" />
+        <div className="space-y-2">
+          <div className="h-4 w-1/3 mx-auto rounded bg-muted" />
+          <div className="h-4 w-1/2 mx-auto rounded bg-muted" />
+        </div>
+      </CardContent>
+      <CardFooter className="grid grid-cols-2 gap-3 p-6 pt-0">
+        <div className="h-9 rounded bg-muted" />
+        <div className="h-9 rounded bg-muted" />
+      </CardFooter>
+    </Card>
+  );
+}
+
+// ── Main section (Server Component) ──────────────────────────────────────────
+const TopRatedDoctors = async () => {
+  const doctors = await getTopRatedDoctors();
+
+  return (
+    <section className="relative overflow-hidden py-20 md:py-24 bg-background">
+      {/* Subtle bg blobs */}
+      <div className="absolute right-0 top-0 h-80 w-80 -translate-y-1/2 translate-x-1/2 rounded-full bg-blue-400/5 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 h-80 w-80 translate-y-1/2 -translate-x-1/2 rounded-full bg-indigo-400/5 blur-3xl pointer-events-none" />
 
       <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mx-auto mb-16 max-w-3xl text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 ring-1 ring-blue-100">
-            <Star className="h-4 w-4 fill-blue-700" />
+        <div className="mx-auto mb-14 max-w-2xl text-center">
+          <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-50 dark:bg-blue-950 px-4 py-1.5 text-sm font-semibold text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800">
+            <Star className="h-3.5 w-3.5 fill-blue-700 dark:fill-blue-300" />
             Top Rated
           </div>
-          <h2 className="mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-3xl font-bold text-transparent lg:text-4xl">
-            Our Top Rated Doctor
+          <h2 className="mb-3 text-3xl font-bold text-foreground lg:text-4xl">
+            Our Top Rated Doctors
           </h2>
-          <p className="text-base text-muted-foreground lg:text-lg">
-            Access to medical experts from various specialities, ready to provide you with top-notch medical services.
+          <p className="text-muted-foreground text-base lg:text-lg leading-relaxed">
+            Hand-picked specialists with the highest patient ratings — ready to
+            provide you with world-class care.
           </p>
         </div>
 
-        {/* Doctors Grid */}
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {doctors.map((doctor) => (
-            <DoctorCard key={doctor.name} doctor={doctor} />
-          ))}
-        </div>
+        {/* Grid */}
+        {doctors.length === 0 ? (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <SkeletonCard />
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {doctors.map((doctor) => (
+              <DoctorCard key={doctor.id} doctor={doctor} />
+            ))}
+          </div>
+        )}
 
-        {/* CTA Section */}
-        <div className="mt-16 text-center">
-          <Button
-            size="lg"
-            className="group h-auto gap-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-4 text-base font-semibold shadow-lg shadow-blue-500/30 transition-all hover:shadow-xl hover:shadow-blue-500/40 hover:scale-105"
-          >
-            View All Doctors
-            <svg
-              className="h-5 w-5 transition-transform group-hover:translate-x-1"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
+        {/* CTA */}
+        <div className="mt-14 text-center">
+          <Link href="/consultation">
+            <Button
+              size="lg"
+              className="group h-auto gap-2 rounded-xl bg-blue-600 hover:bg-blue-700 px-8 py-3.5 text-base font-medium shadow-md shadow-blue-500/20 transition-all hover:shadow-lg hover:shadow-blue-500/30"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </Button>
-          <p className="mt-4 text-sm text-muted-foreground">
-            Browse through our network of 1000+ certified medical professionals
+              View All Doctors
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Browse our network of 1,000+ certified medical professionals
           </p>
         </div>
       </div>
